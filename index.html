@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>进阶版贪吃蛇</title>
+    <title>贪吃的小王！</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -174,13 +174,13 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
             
-            // 游戏变量
+            // 游戏变量 - 调整为较慢速度
             let snake = [];
             let food = {};
             let direction = 'right';
             let nextDirection = 'right';
             let score = 0;
-            let gameSpeed = 10;
+            let gameSpeed = 250; // 初始速度较慢
             let gameInterval;
             let isGameOver = false;
             let gridSize;
@@ -208,7 +208,7 @@
                 direction = 'right';
                 nextDirection = 'right';
                 score = 0;
-                gameSpeed = 150;
+                gameSpeed = 250; // 重置为慢速度
                 isGameOver = false;
                 currentColorIndex = 0;
                 
@@ -245,10 +245,10 @@
                 } while (overlapping);
             }
             
-            // 绘制蛇（带平滑动画效果）
+            // 绘制蛇
             function drawSnake() {
                 snake.forEach((segment, index) => {
-                    // 计算每个段的颜色（略微变化以增强层次感）
+                    // 计算每个段的颜色
                     const colorIndex = (currentColorIndex + Math.floor(index / 3)) % rainbowColors.length;
                     const colorClass = rainbowColors[colorIndex];
                     const colors = getGradientColors(colorClass);
@@ -367,7 +367,7 @@
                 return gradients[colorClass] || { start: '#4F46E5', end: '#EC4899' };
             }
             
-            // 绘制食物（增强动画效果）
+            // 绘制食物
             function drawFood() {
                 // 更新食物闪烁状态
                 food.blink += food.blinkDir;
@@ -377,8 +377,8 @@
                 
                 ctx.save();
                 ctx.translate(food.x + gridSize / 2, food.y + gridSize / 2);
-                ctx.rotate(Date.now() / 800); // 稍快的旋转速度
-                ctx.scale(food.blink, food.blink); // 闪烁效果
+                ctx.rotate(Date.now() / 800);
+                ctx.scale(food.blink, food.blink);
                 
                 // 绘制星星
                 ctx.beginPath();
@@ -390,7 +390,7 @@
                 }
                 ctx.closePath();
                 
-                // 创建更丰富的径向渐变
+                // 创建径向渐变
                 const gradient = ctx.createRadialGradient(
                     0, 0, 0,
                     0, 0, foodSize / 2
@@ -402,7 +402,7 @@
                 ctx.fillStyle = gradient;
                 ctx.fill();
                 
-                // 添加更亮的边框和发光效果
+                // 添加边框和发光效果
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
                 ctx.lineWidth = 2;
                 ctx.stroke();
@@ -496,7 +496,8 @@
                     scoreDisplay.textContent = score;
                     animateScoreIncrease();
                     
-                    gameSpeed = Math.max(50, gameSpeed - 5);
+                    // 速度增长缓慢，最低速度较高
+                    gameSpeed = Math.max(120, gameSpeed - 2); 
                     currentColorIndex++;
                     generateFood();
                     clearInterval(gameInterval);
